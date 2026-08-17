@@ -15,8 +15,5 @@ public class IsaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(IsaApplication.class, args);
 	}
-	@GetMapping("/get-first-name")
-	public String getFirstName(){
-		return "Martin";
-	}
+
 }

@@ -2,8 +2,10 @@ package mappers;
 
 import com.example.isa.entities.Role;
 import com.example.isa.entities.User;
+import com.example.isa.entities.UserProducts;
 import com.example.isa.models.UserModel;
 import com.example.isa.models.UserPageModel;
+import com.example.isa.models.UserProductsModel;
 import org.springframework.data.domain.Page;
 
 
@@ -18,9 +20,7 @@ public class UserMapper {
         user.setFirstName(model.getFirstName());
         user.setLastName(model.getLastName());
         user.setEmail(model.getEmail());
-        user.setPassword(model.getPassword());
         Role role = new Role();
-        role = new Role();
         role.setId(model.getRoleId());
         user.setRole(role);
 
@@ -33,7 +33,6 @@ public class UserMapper {
                 .email(entity.getEmail())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
-                .password(entity.getPassword())
                 .roleId(entity.getRole().getId())
                 .build();
 
@@ -53,5 +52,23 @@ public class UserMapper {
                     .totalPages(pageEntity.getTotalPages())
                     .totalElements(pageEntity.getTotalElements())
                     .build();
+    }
+
+    public static UserProductsModel toModel(UserProducts entity){
+        return UserProductsModel.builder()
+                .id(entity.getId())
+                .email(entity.getEmail())
+                .firstName(entity.getFirstName())
+                .lastName(entity.getLastName())
+                .products(ProductMapper.toModelList(entity.getProducts()))
+                .build();
+    }
+
+    public static List<UserProductsModel> toModelUserProductsList(List<UserProducts> entities){
+        var list = new ArrayList<UserProductsModel>();
+        for(var entity : entities){
+            list.add(toModel(entity));
+        }
+        return list;
     }
 }

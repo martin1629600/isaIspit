@@ -2,7 +2,9 @@ package com.example.isa.controllers;
 
 import com.example.isa.models.UserModel;
 import com.example.isa.models.UserPageModel;
+import com.example.isa.models.UserProductsModel;
 import com.example.isa.repositories.IUserRepository;
+import com.example.isa.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -17,39 +19,49 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("user")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin("*")
 
 public class UserController {
     private final IUserRepository userRepository;
+    private final UserService userService;
 
-    @CrossOrigin("*")
-    @GetMapping("get-first-name")
-    public String getFirstName(){return "Martin";}
+    @GetMapping("get-list")
+    public List<UserModel> getList(){ return userService.findAll();}
 
-    @GetMapping("get-user-list")
-    public List<UserModel> getUserList() {return UserMapper.toModelList(userRepository.findAll()) ;}
 
-    @GetMapping("get-user-page-list")
-    public UserPageModel getUserPageList(Integer pageNumber, Integer pageSize){
-        return UserMapper.toModelPagedList(userRepository.findAll(PageRequest.of(pageNumber, pageSize)));
+    @GetMapping("get-user-products-list")
+    public List<UserProductsModel> getUserProductsList(){
+        return userService.findUserProductsAll();
     }
 
-    @PostMapping("create-user")
-    public boolean createUser(String firstName, String lastName){
-        return true;
+    @GetMapping("get-page-list")
+    public UserPageModel getPageList(Integer pageNumber, Integer pageSize){
+        return userService.findPagedList(PageRequest.of(pageNumber, pageSize));
     }
 
-    @PostMapping("create-user-body")
-    public ResponseEntity<?> createUserBody(@RequestBody @Valid UserModel userModel, BindingResult result){
+
+    @PostMapping("create")
+    public ResponseEntity<?> create(@RequestBody @Valid UserModel userModel, BindingResult result){
         if (result.hasErrors()){
             return new ResponseEntity<>("Neuspesno registrovan", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        var entity = UserMapper.toEntity(userModel);
-        userRepository.save(entity);
 
-        return new ResponseEntity<UserModel>(userModel, HttpStatus.CREATED);
+        return new ResponseEntity<UserModel>(userService.create(userModel), HttpStatus.CREATED);
+    }
+
+    @PutMapping("update")
+    public ResponseEntity<?> update(@RequestBody @Valid UserModel userModel, BindingResult result){
+        if (result.hasErrors()){
+            return new ResponseEntity<>("Neuspesno", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(userService.update(userModel), HttpStatus.CREATED);
+    }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id){
+        userService.delete(id);
+        return new ResponseEntity<>("Uspesno obrisan", HttpStatus.OK);
     }
 
 }
