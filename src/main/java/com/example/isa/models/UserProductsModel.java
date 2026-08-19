@@ -12,6 +12,6 @@ public class UserProductsModel {
     private String firstName;
     private String lastName;
     private String email;
-    private List<ProductModel> products;
+    private List<VinylModel> products;
 
 }

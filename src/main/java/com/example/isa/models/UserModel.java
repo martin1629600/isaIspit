@@ -1,5 +1,6 @@
 package com.example.isa.models;
 
+import com.example.isa.entities.Role;
 import com.example.isa.validator.EmailConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,5 +17,5 @@ public class UserModel {
     @Email
     @EmailConstraint
     private String email;
-    private int roleId;
+    private Role role;
 }

@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "user")
 @Data
 
-public class UserProducts {
+public class UserVinyls {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,5 +24,5 @@ public class UserProducts {
     private String email;
 
     @OneToMany(mappedBy = "userId")
-    private List<Product> products;
+    private List<Vinyl> vinyls;
 }

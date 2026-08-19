@@ -1,15 +1,12 @@
 package com.example.isa.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
-@Table(name = "animal_type")
+@Table(name = "artist")
 @Data
-public class AnimalType {
+public class Artist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +14,4 @@ public class AnimalType {
 
     @Column(name = "name")
     private String name;
-
-    @ManyToMany(mappedBy = "animalTypes")
-    @JsonBackReference
-    private List<Product> products;
 }
