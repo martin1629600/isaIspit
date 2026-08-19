@@ -31,14 +31,11 @@ public class Vinyl {
     @Column(name = "rented_until")
     private LocalDate rentedUntil;
 
-    private String artistName;
-    private List<String> genreNames;
-
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "vinyl_genres",
             joinColumns = @JoinColumn(name = "vinyl_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))

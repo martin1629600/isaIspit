@@ -48,19 +48,21 @@ public class VinylService implements IVinylService {
     }
 
     @Override
-    public VinylModel update(VinylModel model){
-        var entity = vinylRepository.findById(model.getId()).orElseThrow();
+    public VinylModel update(VinylModel model) {
+
+        var entity = vinylRepository
+                .findById(model.getId())
+                .orElseThrow();
 
         entity.setTitle(model.getTitle());
         entity.setReleaseYear(model.getReleaseYear());
         entity.setAvailable(model.isAvailable());
-        entity.setRentedUntil(model.getRentedUntil());
 
-        var artist = artistRepository.findById(model.getArtistId()).orElseThrow();
-        entity.setArtist(artist);
-
-        var genres = genreRepository.findAllById(model.getGenreIds());
-        entity.setGenres(genres);
+        if (model.isAvailable()) {
+            entity.setRentedUntil(null);
+        } else {
+            entity.setRentedUntil(model.getRentedUntil());
+        }
 
         var result = vinylRepository.save(entity);
 
