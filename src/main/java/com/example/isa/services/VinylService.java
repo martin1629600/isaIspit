@@ -2,11 +2,13 @@ package com.example.isa.services;
 
 import com.example.isa.entities.Vinyl;
 import com.example.isa.models.VinylModel;
+import com.example.isa.models.VinylPageModel;
 import com.example.isa.repositories.IArtistRepository;
 import com.example.isa.repositories.IGenreRepository;
 import com.example.isa.repositories.IVinylRepository;
 import lombok.RequiredArgsConstructor;
 import mappers.VinylMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,13 +33,14 @@ public class VinylService implements IVinylService {
 
         entity.setTitle(model.getTitle());
         entity.setReleaseYear(model.getReleaseYear());
-        entity.setUserId(model.getUserId());
+        entity.setAvailable(model.isAvailable());
+        entity.setRentedUntil(model.getRentedUntil());
 
         var artist = artistRepository.findById(model.getArtistId()).orElseThrow();
         entity.setArtist(artist);
 
-        var genre = genreRepository.findById(model.getGenreId()).orElseThrow();
-        entity.setGenre(genre);
+        var genres = genreRepository.findAllById(model.getGenreIds());
+        entity.setGenres(genres);
 
         var result = vinylRepository.save(entity);
 
@@ -50,13 +53,14 @@ public class VinylService implements IVinylService {
 
         entity.setTitle(model.getTitle());
         entity.setReleaseYear(model.getReleaseYear());
-        entity.setUserId(model.getUserId());
+        entity.setAvailable(model.isAvailable());
+        entity.setRentedUntil(model.getRentedUntil());
 
         var artist = artistRepository.findById(model.getArtistId()).orElseThrow();
         entity.setArtist(artist);
 
-        var genre = genreRepository.findById(model.getGenreId()).orElseThrow();
-        entity.setGenre(genre);
+        var genres = genreRepository.findAllById(model.getGenreIds());
+        entity.setGenres(genres);
 
         var result = vinylRepository.save(entity);
 
@@ -66,5 +70,11 @@ public class VinylService implements IVinylService {
     @Override
     public void delete(Integer id){
         vinylRepository.deleteById(id);
+    }
+
+    @Override
+    public VinylPageModel findPagedList(PageRequest pageRequest){
+        var result = vinylRepository.findAll(pageRequest);
+        return VinylMapper.toModelPagedList(result);
     }
 }

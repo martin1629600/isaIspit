@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 
 @Data
 @Builder
@@ -13,10 +16,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VinylModel {
     private Integer id;
-    @NotBlank
     private String title;
-    private int releaseYear;
-    private Integer userId;
+    private Integer releaseYear;
+
     private Integer artistId;
-    private Integer genreId;
-}
+    private String artistName;
+
+    private List<Integer> genreIds;
+    private List<String> genreNames;
+
+    private boolean available;
+    private LocalDate rentedUntil;
+    }

@@ -3,6 +3,8 @@ package com.example.isa.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -23,11 +25,23 @@ public class Vinyl {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "available")
+    private boolean available;
+
+    @Column(name = "rented_until")
+    private LocalDate rentedUntil;
+
+    private String artistName;
+    private List<String> genreNames;
+
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
-    private Genre genre;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "vinyl_genres",
+            joinColumns = @JoinColumn(name = "vinyl_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    @JsonManagedReference
+    private List<Genre> genres;
 }

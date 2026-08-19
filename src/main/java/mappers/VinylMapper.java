@@ -1,7 +1,10 @@
 package mappers;
 
+import com.example.isa.entities.Genre;
 import com.example.isa.entities.Vinyl;
 import com.example.isa.models.VinylModel;
+import com.example.isa.models.VinylPageModel;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +16,23 @@ public class VinylMapper {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .releaseYear(entity.getReleaseYear())
-                .userId(entity.getUserId())
-                .genreId(entity.getGenre().getId())
-                .artistId(entity.getArtist().getId())
+                .genreNames(
+                        entity.getGenres()
+                                .stream()
+                                .map(Genre::getName)
+                                .toList()
+                )
+                .artistName(entity.getArtist().getName())
+                .available(entity.isAvailable())
+                .rentedUntil(entity.getRentedUntil())
+                .build();
+    }
+
+    public static VinylPageModel toModelPagedList(Page<Vinyl> pageEntity){
+        return VinylPageModel.builder()
+                .totalElements(pageEntity.getTotalElements())
+                .totalPages(pageEntity.getTotalPages())
+                .vinyls(toModelList(pageEntity.getContent()))
                 .build();
     }
 

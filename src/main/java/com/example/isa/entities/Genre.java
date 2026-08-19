@@ -18,5 +18,7 @@ public class Genre {
     @Column(name = "name")
     private String name;
 
-
+    @ManyToMany(mappedBy = "genres")
+    @JsonBackReference
+    private List<Vinyl> vinyls;
 }
