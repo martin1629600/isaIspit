@@ -22,9 +22,6 @@ public class Vinyl {
     @Column(name = "release_year")
     private Integer releaseYear;
 
-    @Column(name = "user_id")
-    private Integer userId;
-
     @Column(name = "available")
     private boolean available;
 

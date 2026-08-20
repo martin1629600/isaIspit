@@ -25,6 +25,9 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
+    @Value("${security.jwt.refresh-expiration-time}")
+    private long refreshExpiration;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -120,5 +123,14 @@ public class JwtService {
                 Decoders.BASE64.decode(secretKey);
 
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateRefreshToken(User userDetails) {
+
+        return buildToken(
+                new HashMap<>(),
+                userDetails.getEmail(),
+                refreshExpiration
+        );
     }
 }
