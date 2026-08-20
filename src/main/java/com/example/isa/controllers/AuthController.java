@@ -2,6 +2,7 @@ package com.example.isa.controllers;
 
 import com.example.isa.models.LoginModel;
 import com.example.isa.services.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody LoginModel loginModel) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginModel loginModel) {
         return ResponseEntity.ok(authService.login(loginModel));
     }
 }
